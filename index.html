@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zac Duffin Chambers</title>
+<meta name="description" content="Zac Duffin Chambers. Student of cybersecurity, artificial intelligence, server infrastructure and Linux systems.">
+<meta property="og:title" content="Zac Duffin Chambers">
+<meta property="og:description" content="Cybersecurity, artificial intelligence, server infrastructure and Linux systems.">
+<meta property="og:type" content="website">
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" fill="%23ffffff"/><path d="M8 9h16l-12 14h12" stroke="%23e10600" stroke-width="2.5" fill="none"/></svg>'>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        paper:  '#fdfcfb',
+        ink:    '#181512',
+        soft:   '#6f6a66',
+        rule:   'rgba(24,21,18,0.12)',
+        red:    '#e10600',
+        reddim: 'rgba(225,6,0,0.08)',
+      },
+      fontFamily: {
+        sans: ['"Space Grotesk"', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'monospace'],
+      },
+    }
+  }
+}
+</script>
+
+<style>
+:root{
+  --paper:#fdfcfb;
+  --ink:#181512;
+  --soft:#6f6a66;
+  --rule:rgba(24,21,18,.12);
+  --red:#e10600;
+}
+
+html{ background:var(--paper); }
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Space Grotesk',sans-serif;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+::selection{ background:var(--red); color:#fff; }
+
+/* scrollbar */
+::-webkit-scrollbar{ width:10px; height:10px; }
+::-webkit-scrollbar-track{ background:var(--paper); }
+::-webkit-scrollbar-thumb{ background:#ddd8d4; border:2px solid var(--paper); }
+::-webkit-scrollbar-thumb:hover{ background:var(--red); }
+*{ scrollbar-width:thin; scrollbar-color:#ddd8d4 var(--paper); }
+
+/* topographic canvas */
+#topo{
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  width:100%; height:100%;
+}
+
+/* small caps label */
+.t-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.625rem; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--soft);
+}
+
+/* cards */
+.card{
+  background:#fff;
+  border:1px solid var(--rule);
+  transition:border-color .3s ease, transform .3s ease, box-shadow .3s ease;
+}
+.card:hover{
+  border-color:rgba(225,6,0,.45);
+  transform:translateY(-3px);
+  box-shadow:0 12px 32px -18px rgba(24,21,18,.18);
+}
+
+/* buttons */
+.btn{
+  position:relative; display:inline-flex; align-items:center; gap:.55rem;
+  font-family:'JetBrains Mono',monospace; font-size:.6875rem; letter-spacing:.14em;
+  text-transform:uppercase; padding:.8rem 1.4rem; white-space:nowrap;
+  border:1px solid var(--ink); color:var(--ink); background:#fff;
+  overflow:hidden; cursor:pointer; transition:color .3s, border-color .3s;
+}
+.btn::before{
+  content:''; position:absolute; inset:0; background:var(--ink);
+  transform:translateX(-101%); transition:transform .35s cubic-bezier(.77,0,.18,1);
+}
+.btn:hover::before{ transform:translateX(0); }
+.btn:hover{ color:#fff; }
+.btn > *{ position:relative; z-index:1; }
+.btn.btn-red{ border-color:var(--red); color:var(--red); }
+.btn.btn-red::before{ background:var(--red); }
+.btn.btn-red:hover{ color:#fff; }
+
+/* nav */
+.nav-link{
+  font-family:'JetBrains Mono',monospace; font-size:.625rem; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--soft); position:relative; padding:.25rem 0;
+  transition:color .25s;
+}
+.nav-link::after{
+  content:''; position:absolute; left:0; bottom:-2px; height:1px; width:0;
+  background:var(--red); transition:width .3s cubic-bezier(.77,0,.18,1);
+}
+.nav-link:hover{ color:var(--ink); }
+.nav-link:hover::after{ width:100%; }
+
+/* section rule */
+.sec-rule{ height:1px; flex:1; background:linear-gradient(90deg, rgba(225,6,0,.5), rgba(225,6,0,.06)); }
+.sec-num{
+  font-family:'JetBrains Mono',monospace; font-size:.6875rem; letter-spacing:.2em;
+  color:var(--red);
+}
+
+/* spec rows */
+.spec-row{
+  display:flex; justify-content:space-between; gap:1.5rem; padding:.85rem 0;
+  border-bottom:1px solid var(--rule); flex-wrap:wrap;
+}
+.spec-row:last-child{ border-bottom:none; }
+.spec-row dt{
+  font-family:'JetBrains Mono',monospace; font-size:.625rem; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--soft); padding-top:.15rem;
+}
+.spec-row dd{ font-size:.9375rem; font-weight:500; text-align:right; }
+
+/* simple tag */
+.tag{
+  font-family:'JetBrains Mono',monospace; font-size:.5625rem; letter-spacing:.12em;
+  text-transform:uppercase; padding:.3rem .6rem;
+  border:1px solid var(--rule); color:var(--soft); white-space:nowrap;
+  transition:border-color .25s, color .25s;
+}
+.card:hover .tag{ border-color:rgba(225,6,0,.3); color:var(--ink); }
+
+/* link rows */
+.link-row{
+  display:flex; align-items:center; justify-content:space-between;
+  border:1px solid var(--rule); background:#fff; padding:1rem 1.2rem;
+  transition:border-color .25s;
+}
+.link-row:hover{ border-color:rgba(225,6,0,.45); }
+.link-row:hover .arrow{ transform:translate(3px,-3px); color:var(--red); }
+.arrow{ transition:transform .3s, color .3s; color:var(--soft); font-family:'JetBrains Mono',monospace; }
+
+/* reveal on scroll */
+.reveal{ opacity:0; transform:translateY(22px); transition:opacity .7s cubic-bezier(.2,.65,.2,1), transform .7s cubic-bezier(.2,.65,.2,1); }
+.reveal.in{ opacity:1; transform:none; }
+.reveal[data-delay="1"]{ transition-delay:.08s; }
+.reveal[data-delay="2"]{ transition-delay:.16s; }
+.reveal[data-delay="3"]{ transition-delay:.24s; }
+
+/* ---- interactive 3d server model ----
+   real chassis is 46.8 x 21.9 x 65.1 cm; faces are scaled at 5px per cm:
+   width 110, height 234, depth 326 */
+.hw3d-stage{
+  min-height:420px; display:flex; align-items:center; justify-content:center;
+  perspective:1100px; cursor:grab; touch-action:none; position:relative;
+  user-select:none; -webkit-user-select:none;
+}
+.hw3d-stage:active{ cursor:grabbing; }
+.hw3d-stage::after{
+  content:''; position:absolute; left:50%; bottom:34px; width:240px; height:26px;
+  transform:translateX(-50%);
+  background:radial-gradient(ellipse at center, rgba(24,21,18,.16), transparent 68%);
+}
+.hw3d{ position:relative; width:110px; height:234px; transform-style:preserve-3d; }
+.f{
+  position:absolute; left:50%; top:50%; width:110px; height:234px;
+  backface-visibility:hidden;
+}
+.f-front{ transform:translate(-50%,-50%) translateZ(163px); background:#1d1e20; border:1px solid #303235; }
+.f-back{ transform:translate(-50%,-50%) rotateY(180deg) translateZ(163px); background:#1a1b1d; border:1px solid #2a2c2e; }
+.f-right{ width:326px; transform:translate(-50%,-50%) rotateY(90deg) translateZ(55px); background:linear-gradient(90deg,#232527,#1b1c1e); border:1px solid #2a2c2e; }
+.f-left{ width:326px; transform:translate(-50%,-50%) rotateY(-90deg) translateZ(55px); background:linear-gradient(90deg,#1b1c1e,#232527); border:1px solid #2a2c2e; }
+.f-top{ width:110px; height:326px; transform:translate(-50%,-50%) rotateX(90deg) translateZ(117px); background:#242628; border:1px solid #303235; }
+.f-bottom{ width:110px; height:326px; transform:translate(-50%,-50%) rotateX(-90deg) translateZ(117px); background:#141517; }
+
+/* front bezel: media bay, power button, two 8 bay SFF cages, vent grille */
+.f-front .mediabay{ position:absolute; top:10px; left:8px; right:28px; height:10px; background:#101113; border:1px solid #2b2d30; }
+.f-front .pwr-dot{ position:absolute; top:11px; right:11px; width:8px; height:8px; border-radius:50%; border:1px solid #3c3f43; background:#232527; }
+.f-front .cage{
+  position:absolute; left:8px; right:8px; height:42px;
+  display:grid; grid-template-columns:repeat(4,1fr); grid-template-rows:repeat(2,1fr); gap:2px;
+}
+.f-front .cage.c1{ top:30px; }
+.f-front .cage.c2{ top:78px; }
+.f-front .cage i{ background:#26282b; border:1px solid #35383c; position:relative; }
+.f-front .cage i::after{ content:''; position:absolute; right:2px; top:2px; width:2px; height:5px; background:#42464b; }
+.f-front .grille{
+  position:absolute; left:8px; right:8px; top:128px; bottom:24px;
+  background:repeating-linear-gradient(0deg,#18191b 0 2px,#212325 2px 5px);
+  border:1px solid #2b2d30;
+}
+.f-front .badge{
+  position:absolute; bottom:7px; left:8px;
+  font-family:'JetBrains Mono',monospace; font-size:7px; letter-spacing:.08em; color:#8d9196;
+}
+
+/* rear: io block, dual psus, vent field */
+.f-back .io{ position:absolute; left:8px; top:10px; width:44px; height:58px; border:1px solid #2e3134; background:repeating-linear-gradient(90deg,#1b1c1e 0 4px,#232527 4px 8px); }
+.f-back .psu{ position:absolute; right:8px; width:40px; height:26px; border:1px solid #2e3134; background:#202224; }
+.f-back .psu.p1{ top:10px; }
+.f-back .psu.p2{ top:42px; }
+.f-back .grille-b{ position:absolute; left:8px; right:8px; top:84px; bottom:10px; background:repeating-linear-gradient(0deg,#17181a 0 2px,#1e2022 2px 4px); }
+
+.view-btn{
+  font-family:'JetBrains Mono',monospace; font-size:.5625rem; letter-spacing:.12em;
+  text-transform:uppercase; padding:.3rem .65rem; border:1px solid var(--rule);
+  color:var(--soft); background:#fff; cursor:pointer; transition:border-color .25s, color .25s;
+}
+.view-btn:hover, .view-btn.active{ border-color:rgba(225,6,0,.5); color:var(--red); }
+
+section{ scroll-margin-top:84px; position:relative; z-index:1; }
+
+@media (prefers-reduced-motion: reduce){
+  *, *::before, *::after{ animation-duration:.01ms !important; transition-duration:.01ms !important; }
+  html{ scroll-behavior:auto; }
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="topo" aria-hidden="true"></canvas>
+
+<!-- ================= HEADER ================= -->
+<header class="fixed top-0 inset-x-0 z-50 border-b border-rule bg-paper/85 backdrop-blur-md">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between gap-6">
+    <a href="#top" class="flex items-center gap-3 group">
+      <div class="w-8 h-8 border border-ink flex items-center justify-center group-hover:border-red transition-colors">
+        <span class="font-mono text-xs text-red">Z</span>
+      </div>
+      <span class="font-semibold tracking-tight text-sm">Zac Duffin Chambers</span>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-7">
+      <a class="nav-link" href="#study">Study</a>
+      <a class="nav-link" href="#homelab">Homelab</a>
+      <a class="nav-link" href="#projects">Projects</a>
+      <a class="nav-link" href="#selfhosted">Self-Hosted</a>
+      <a class="nav-link" href="#markets">Markets</a>
+      <a class="nav-link" href="#contact">Contact</a>
+    </nav>
+
+    <button id="menu-btn" class="md:hidden w-9 h-9 border border-rule flex flex-col items-center justify-center gap-1.5" aria-label="Menu">
+      <span class="block w-4 h-px bg-ink transition-transform" id="mb1"></span>
+      <span class="block w-4 h-px bg-ink transition-opacity" id="mb2"></span>
+    </button>
+  </div>
+
+  <div id="mobile-menu" class="md:hidden hidden border-t border-rule bg-paper/95 backdrop-blur-md">
+    <nav class="px-6 py-5 flex flex-col gap-4">
+      <a class="nav-link" href="#study">Study</a>
+      <a class="nav-link" href="#homelab">Homelab</a>
+      <a class="nav-link" href="#projects">Projects</a>
+      <a class="nav-link" href="#selfhosted">Self-Hosted</a>
+      <a class="nav-link" href="#markets">Markets</a>
+      <a class="nav-link" href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top" class="relative z-10">
+
+<!-- ================= HERO ================= -->
+<section class="min-h-[92vh] flex flex-col justify-center pt-24 pb-16">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 w-full">
+
+    <p class="t-label mb-6 reveal">Student, United Kingdom</p>
+
+    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight leading-tight mb-6 reveal" data-delay="1">
+      Zac Duffin Chambers
+    </h1>
+
+    <p class="text-soft text-base sm:text-lg leading-relaxed max-w-2xl mb-10 reveal" data-delay="2">
+      I study cybersecurity, artificial intelligence, server infrastructure and
+      linux systems, I also trade stocks part time. This site covers what I am
+      working on, the server I run it on and the software I use.
+    </p>
+
+    <div class="flex flex-wrap gap-3 reveal" data-delay="3">
+      <a class="btn btn-red" href="https://github.com/SC4RT" target="_blank" rel="noopener">
+        <span>GitHub</span><span>&#8599;</span>
+      </a>
+      <a class="btn" href="https://www.linkedin.com/in/zacduffinchambers/" target="_blank" rel="noopener">
+        <span>LinkedIn</span><span>&#8599;</span>
+      </a>
+      <a class="btn" href="mailto:zacchambers@z4c.co.uk">
+        <span>Email</span><span>&#8594;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 01 STUDY ================= -->
+<section id="study" class="py-24">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8">
+
+    <div class="flex items-center gap-5 mb-4 reveal">
+      <span class="sec-num">01</span>
+      <div class="sec-rule"></div>
+    </div>
+    <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-3 reveal">Fields of Study</h2>
+    <p class="text-soft max-w-xl mb-12 reveal" data-delay="1">
+      The four areas I spend most of my time on.
+    </p>
+
+    <div class="grid sm:grid-cols-2 gap-5">
+
+      <article class="card p-7 reveal">
+        <div class="flex items-start justify-between mb-6">
+          <svg class="w-6 h-6 text-red" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 2.5 4 5.5v6c0 4.7 3.4 8.4 8 10 4.6-1.6 8-5.3 8-10v-6l-8-3z"/>
+            <path d="M9.2 12l2 2 3.8-4"/>
+          </svg>
+          <span class="t-label">01</span>
+        </div>
+        <h3 class="text-lg font-semibold tracking-tight mb-2.5">Cybersecurity</h3>
+        <p class="text-sm text-soft leading-relaxed mb-6">
+          How systems are attacked and defended. I focus on network security,
+          common vulnerabilities and hands-on practice in a safe lab environment.
+        </p>
+        <div class="flex flex-wrap gap-2">
+          <span class="tag">Network security</span><span class="tag">Vulnerabilities</span><span class="tag">Practice labs</span>
+        </div>
+      </article>
+
+      <article class="card p-7 reveal" data-delay="1">
+        <div class="flex items-start justify-between mb-6">
+          <svg class="w-6 h-6 text-red" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="5" cy="12" r="2.2"/><circle cx="19" cy="5.5" r="2.2"/><circle cx="19" cy="18.5" r="2.2"/>
+            <path d="M7 11l9.8-4.6M7 13l9.8 4.6M19 7.7v8.6"/>
+          </svg>
+          <span class="t-label">02</span>
+        </div>
+        <h3 class="text-lg font-semibold tracking-tight mb-2.5">Artificial Intelligence</h3>
+        <p class="text-sm text-soft leading-relaxed mb-6">
+          How machine learning models are built, trained and used, and where
+          AI and security overlap.
+        </p>
+        <div class="flex flex-wrap gap-2">
+          <span class="tag">Machine learning</span><span class="tag">Neural networks</span><span class="tag">Model training</span>
+        </div>
+      </article>
+
+      <article class="card p-7 reveal" data-delay="2">
+        <div class="flex items-start justify-between mb-6">
+          <svg class="w-6 h-6 text-red" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="4" y="3.5" width="16" height="5.4"/><rect x="4" y="9.3" width="16" height="5.4"/>
+            <rect x="4" y="15.1" width="16" height="5.4"/>
+            <path d="M7 6.2h.01M7 12h.01M7 17.8h.01" stroke-linecap="round" stroke-width="2"/>
+          </svg>
+          <span class="t-label">03</span>
+        </div>
+        <h3 class="text-lg font-semibold tracking-tight mb-2.5">Server Infrastructure</h3>
+        <p class="text-sm text-soft leading-relaxed mb-6">
+          Running physical servers and storage, and keeping everything
+          reliable and organised.
+        </p>
+        <div class="flex flex-wrap gap-2">
+          <span class="tag">Containers</span><span class="tag">Storage</span><span class="tag">Networking</span>
+        </div>
+      </article>
+
+      <article class="card p-7 reveal" data-delay="3">
+        <div class="flex items-start justify-between mb-6">
+          <svg class="w-6 h-6 text-red" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M4.5 5.5 10 12l-5.5 6.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12.5 18.5h7" stroke-linecap="round"/>
+          </svg>
+          <span class="t-label">04</span>
+        </div>
+        <h3 class="text-lg font-semibold tracking-tight mb-2.5">Linux Systems</h3>
+        <p class="text-sm text-soft leading-relaxed mb-6">
+          Day to day system administration and shell scripting across
+          different distributions.
+        </p>
+        <div class="flex flex-wrap gap-2">
+          <span class="tag">Debian</span><span class="tag">Arch</span><span class="tag">Kali</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 02 HOMELAB ================= -->
+<section id="homelab" class="py-24">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8">
+
+    <div class="flex items-center gap-5 mb-4 reveal">
+      <span class="sec-num">02</span>
+      <div class="sec-rule"></div>
+    </div>
+    <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-3 reveal">Homelab</h2>
+    <p class="text-soft max-w-xl mb-12 reveal" data-delay="1">
+      My main server. It runs my containers and self-hosted services.
+    </p>
+
+    <div class="grid lg:grid-cols-2 gap-5 mb-5">
+
+      <!-- interactive 3d model, built to the real chassis proportions -->
+      <div class="card reveal flex flex-col">
+        <div class="flex items-center justify-between px-6 pt-5">
+          <p class="t-label">HP Enterprise ML350 Gen9</p>
+          <div class="flex gap-2">
+            <button class="view-btn" data-view="front">Front</button>
+            <button class="view-btn" data-view="side">Side</button>
+            <button class="view-btn" data-view="back">Back</button>
+          </div>
+        </div>
+
+        <div id="hw3d-stage" class="hw3d-stage flex-1">
+          <div id="hw3d" class="hw3d">
+            <div class="f f-front">
+              <div class="mediabay"></div>
+              <span class="pwr-dot"></span>
+              <div class="cage c1"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+              <div class="cage c2"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+              <div class="grille"></div>
+              <span class="badge">ML350 Gen9</span>
+            </div>
+            <div class="f f-back">
+              <div class="io"></div>
+              <div class="psu p1"></div>
+              <div class="psu p2"></div>
+              <div class="grille-b"></div>
+            </div>
+            <div class="f f-right"></div>
+            <div class="f f-left"></div>
+            <div class="f f-top"></div>
+            <div class="f f-bottom"></div>
+          </div>
+        </div>
+
+        <p class="t-label text-center pb-5 px-6">Drag to rotate</p>
+      </div>
+
+      <div class="card p-7 sm:p-9 reveal" data-delay="1">
+        <p class="t-label mb-1.5">Server</p>
+        <h3 class="text-xl font-semibold tracking-tight mb-6">HP ProLiant ML350 Gen9</h3>
+        <dl>
+          <div class="spec-row">
+            <dt>Model</dt>
+            <dd>HP ProLiant ML350 Gen9, 32SFF</dd>
+          </div>
+          <div class="spec-row">
+            <dt>Form factor</dt>
+            <dd>5U tower</dd>
+          </div>
+          <div class="spec-row">
+            <dt>Processors</dt>
+            <dd>2&times; Intel Xeon E5-2680 v3</dd>
+          </div>
+          <div class="spec-row">
+            <dt>Cores</dt>
+            <dd>24 cores, 48 threads</dd>
+          </div>
+          <div class="spec-row">
+            <dt>Memory</dt>
+            <dd>64 GB DDR4 ECC</dd>
+          </div>
+          <div class="spec-row">
+            <dt>Storage</dt>
+            <dd>16&times; 1 TB SAS</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="grid sm:grid-cols-3 gap-5">
+      <div class="card p-6 text-center reveal" data-delay="1">
+        <div class="text-3xl font-semibold tracking-tight text-red">48</div>
+        <div class="t-label mt-1.5">Threads</div>
+      </div>
+      <div class="card p-6 text-center reveal" data-delay="2">
+        <div class="text-3xl font-semibold tracking-tight text-red">64<span class="text-lg align-top">GB</span></div>
+        <div class="t-label mt-1.5">Memory</div>
+      </div>
+      <div class="card p-6 text-center reveal" data-delay="3">
+        <div class="text-3xl font-semibold tracking-tight text-red">16<span class="text-lg align-top">TB</span></div>
+        <div class="t-label mt-1.5">Raw storage</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 03 PROJECTS ================= -->
+<section id="projects" class="py-24">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8">
+
+    <div class="flex items-center gap-5 mb-4 reveal">
+      <span class="sec-num">03</span>
+      <div class="sec-rule"></div>
+    </div>
+    <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-3 reveal">Projects</h2>
+    <p class="text-soft max-w-xl mb-12 reveal" data-delay="1">
+      Public repositories from my GitHub.
+    </p>
+
+    <div id="repo-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div class="card p-7 animate-pulse"><div class="h-3 w-1/3 bg-neutral-100 mb-6"></div><div class="h-4 w-2/3 bg-neutral-100 mb-3"></div><div class="h-3 w-full bg-neutral-100"></div></div>
+      <div class="card p-7 animate-pulse hidden sm:block"><div class="h-3 w-1/3 bg-neutral-100 mb-6"></div><div class="h-4 w-2/3 bg-neutral-100 mb-3"></div><div class="h-3 w-full bg-neutral-100"></div></div>
+      <div class="card p-7 animate-pulse hidden lg:block"><div class="h-3 w-1/3 bg-neutral-100 mb-6"></div><div class="h-4 w-2/3 bg-neutral-100 mb-3"></div><div class="h-3 w-full bg-neutral-100"></div></div>
+    </div>
+
+    <div class="mt-10 reveal">
+      <a class="btn" href="https://github.com/SC4RT?tab=repositories" target="_blank" rel="noopener">
+        <span>View all on GitHub</span><span>&#8599;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 04 SELF-HOSTED ================= -->
+<section id="selfhosted" class="py-24">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8">
+
+    <div class="flex items-center gap-5 mb-4 reveal">
+      <span class="sec-num">04</span>
+      <div class="sec-rule"></div>
+    </div>
+    <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-3 reveal">Self-Hosted</h2>
+    <p class="text-soft max-w-xl mb-12 reveal" data-delay="1">
+      Open source projects I run at home and recommend.
+    </p>
+
+    <!-- To add another project, copy one of the <a> cards below and edit the name, description and link. -->
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
+      <a href="https://immich.app" target="_blank" rel="noopener" class="card p-7 block reveal">
+        <div class="flex items-center justify-between mb-5">
+          <span class="t-label">Photos</span>
+          <span class="arrow">&#8599;</span>
+        </div>
+        <h3 class="text-lg font-semibold tracking-tight mb-2">Immich</h3>
+        <p class="text-sm text-soft leading-relaxed">
+          Self-hosted photo and video backup with a clean mobile app.
+        </p>
+      </a>
+
+      <a href="https://jellyfin.org" target="_blank" rel="noopener" class="card p-7 block reveal" data-delay="1">
+        <div class="flex items-center justify-between mb-5">
+          <span class="t-label">Media</span>
+          <span class="arrow">&#8599;</span>
+        </div>
+        <h3 class="text-lg font-semibold tracking-tight mb-2">Jellyfin</h3>
+        <p class="text-sm text-soft leading-relaxed">
+          Free and open source media server for films and TV.
+        </p>
+      </a>
+
+      <a href="https://www.navidrome.org" target="_blank" rel="noopener" class="card p-7 block reveal" data-delay="2">
+        <div class="flex items-center justify-between mb-5">
+          <span class="t-label">Music</span>
+          <span class="arrow">&#8599;</span>
+        </div>
+        <h3 class="text-lg font-semibold tracking-tight mb-2">Navidrome</h3>
+        <p class="text-sm text-soft leading-relaxed">
+          Lightweight personal music streaming server.
+        </p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 05 MARKETS ================= -->
+<section id="markets" class="py-24">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8">
+
+    <div class="flex items-center gap-5 mb-4 reveal">
+      <span class="sec-num">05</span>
+      <div class="sec-rule"></div>
+    </div>
+    <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-3 reveal">Markets</h2>
+    <p class="text-soft max-w-xl mb-12 reveal" data-delay="1">
+      I trade stocks part time. A live look at the Nasdaq 100 and the main
+      indices in each region.
+    </p>
+
+    <!-- main chart: Nasdaq 100 -->
+    <div class="card p-2 mb-5 reveal">
+      <div class="tradingview-widget-container" style="height:480px">
+        <div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+        {
+        "width": "100%",
+        "height": "480",
+        "symbol": "FOREXCOM:NSXUSD",
+        "interval": "D",
+        "timezone": "Europe/London",
+        "theme": "light",
+        "style": "1",
+        "locale": "en",
+        "hide_top_toolbar": false,
+        "hide_legend": false,
+        "allow_symbol_change": false,
+        "save_image": false,
+        "calendar": false,
+        "support_host": "https://www.tradingview.com"
+        }
+        </script>
+      </div>
+    </div>
+
+    <!-- regional indices -->
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+
+      <div class="reveal">
+        <p class="t-label mb-3">United States</p>
+        <div class="card p-1">
+          <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container__widget"></div>
+            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+            {
+            "symbol": "FOREXCOM:SPXUSD",
+            "width": "100%",
+            "height": "220",
+            "locale": "en",
+            "dateRange": "1M",
+            "colorTheme": "light",
+            "isTransparent": true,
+            "autosize": false,
+            "largeChartUrl": ""
+            }
+            </script>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal" data-delay="1">
+        <p class="t-label mb-3">United Kingdom</p>
+        <div class="card p-1">
+          <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container__widget"></div>
+            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+            {
+            "symbol": "FOREXCOM:UKXGBP",
+            "width": "100%",
+            "height": "220",
+            "locale": "en",
+            "dateRange": "1M",
+            "colorTheme": "light",
+            "isTransparent": true,
+            "autosize": false,
+            "largeChartUrl": ""
+            }
+            </script>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal" data-delay="2">
+        <p class="t-label mb-3">Japan</p>
+        <div class="card p-1">
+          <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container__widget"></div>
+            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+            {
+            "symbol": "INDEX:NKY",
+            "width": "100%",
+            "height": "220",
+            "locale": "en",
+            "dateRange": "1M",
+            "colorTheme": "light",
+            "isTransparent": true,
+            "autosize": false,
+            "largeChartUrl": ""
+            }
+            </script>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal" data-delay="3">
+        <p class="t-label mb-3">Germany</p>
+        <div class="card p-1">
+          <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container__widget"></div>
+            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+            {
+            "symbol": "INDEX:DEU40",
+            "width": "100%",
+            "height": "220",
+            "locale": "en",
+            "dateRange": "1M",
+            "colorTheme": "light",
+            "isTransparent": true,
+            "autosize": false,
+            "largeChartUrl": ""
+            }
+            </script>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="t-label mt-6 reveal">Charts by TradingView</p>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<footer id="contact" class="relative z-10 border-t border-rule pt-24 pb-10" style="scroll-margin-top:84px">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8">
+
+    <h2 class="text-3xl sm:text-4xl font-semibold tracking-tight mb-3 reveal">Contact</h2>
+    <p class="text-soft max-w-xl mb-12 reveal" data-delay="1">
+      The quickest way to reach me is by email.
+    </p>
+
+    <div class="grid lg:grid-cols-2 gap-5 mb-16">
+
+      <div class="card p-7 reveal">
+        <p class="t-label mb-3">Email</p>
+        <p class="font-mono text-sm mb-6 break-all">zacchambers@z4c.co.uk</p>
+        <div class="flex flex-wrap gap-3">
+          <button class="btn btn-red" id="copy-email">
+            <span id="copy-email-label">Copy address</span>
+          </button>
+          <a class="btn" href="mailto:zacchambers@z4c.co.uk"><span>Open mail app</span><span>&#8594;</span></a>
+        </div>
+      </div>
+
+      <div class="card p-7 reveal" data-delay="1">
+        <p class="t-label mb-3">Elsewhere</p>
+        <div class="space-y-3">
+          <a href="https://github.com/SC4RT" target="_blank" rel="noopener" class="link-row">
+            <span class="font-mono text-xs tracking-wide">GitHub <span class="text-soft">/ SC4RT</span></span>
+            <span class="arrow">&#8599;</span>
+          </a>
+          <a href="https://www.linkedin.com/in/zacduffinchambers/" target="_blank" rel="noopener" class="link-row">
+            <span class="font-mono text-xs tracking-wide">LinkedIn <span class="text-soft">/ zacduffinchambers</span></span>
+            <span class="arrow">&#8599;</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-t border-rule pt-8">
+      <p class="t-label">Zac Duffin Chambers 2026</p>
+    </div>
+  </div>
+</footer>
+
+</main>
+
+<script>
+(() => {
+'use strict';
+const $  = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+
+/* ---------- reveal on scroll ---------- */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+$$('.reveal').forEach(el => io.observe(el));
+
+/* ---------- mobile menu ---------- */
+const menuBtn = $('#menu-btn'), mobileMenu = $('#mobile-menu');
+menuBtn.addEventListener('click', () => {
+  const open = mobileMenu.classList.toggle('hidden') === false;
+  $('#mb1').style.transform = open ? 'rotate(45deg) translateY(3px)' : '';
+  $('#mb2').style.opacity   = open ? '0' : '1';
+});
+mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  mobileMenu.classList.add('hidden');
+  $('#mb1').style.transform = ''; $('#mb2').style.opacity = '1';
+}));
+
+/* ================================================================
+   TOPOGRAPHIC BACKGROUND
+   Animated contour lines drawn from a noise field. The field is
+   warped by the cursor so the contours ripple around it.
+   ================================================================ */
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* --- compact 3D simplex noise (Gustavson's public domain method) --- */
+const grad3 = [
+  [1,1,0],[-1,1,0],[1,-1,0],[-1,-1,0],
+  [1,0,1],[-1,0,1],[1,0,-1],[-1,0,-1],
+  [0,1,1],[0,-1,1],[0,1,-1],[0,-1,-1]
+];
+const perm = new Uint8Array(512), permMod12 = new Uint8Array(512);
+(() => {
+  const p = new Uint8Array(256);
+  for (let i = 0; i < 256; i++) p[i] = i;
+  let s = 47;
+  for (let i = 255; i > 0; i--) {
+    s = (s * 16807) % 2147483647;
+    const r = s % (i + 1);
+    const tmp = p[i]; p[i] = p[r]; p[r] = tmp;
+  }
+  for (let i = 0; i < 512; i++) { perm[i] = p[i & 255]; permMod12[i] = perm[i] % 12; }
+})();
+const F3 = 1 / 3, G3 = 1 / 6;
+function noise3(xin, yin, zin) {
+  let n0, n1, n2, n3;
+  const s = (xin + yin + zin) * F3;
+  const i = Math.floor(xin + s), j = Math.floor(yin + s), k = Math.floor(zin + s);
+  const t = (i + j + k) * G3;
+  const x0 = xin - (i - t), y0 = yin - (j - t), z0 = zin - (k - t);
+  let i1, j1, k1, i2, j2, k2;
+  if (x0 >= y0) {
+    if (y0 >= z0)      { i1=1;j1=0;k1=0; i2=1;j2=1;k2=0; }
+    else if (x0 >= z0) { i1=1;j1=0;k1=0; i2=1;j2=0;k2=1; }
+    else               { i1=0;j1=0;k1=1; i2=1;j2=0;k2=1; }
+  } else {
+    if (y0 < z0)       { i1=0;j1=0;k1=1; i2=0;j2=1;k2=1; }
+    else if (x0 < z0)  { i1=0;j1=1;k1=0; i2=0;j2=1;k2=1; }
+    else               { i1=0;j1=1;k1=0; i2=1;j2=1;k2=0; }
+  }
+  const x1 = x0 - i1 + G3,     y1 = y0 - j1 + G3,     z1 = z0 - k1 + G3;
+  const x2 = x0 - i2 + 2*G3,   y2 = y0 - j2 + 2*G3,   z2 = z0 - k2 + 2*G3;
+  const x3 = x0 - 1 + 3*G3,    y3 = y0 - 1 + 3*G3,    z3 = z0 - 1 + 3*G3;
+  const ii = i & 255, jj = j & 255, kk = k & 255;
+  let t0 = 0.6 - x0*x0 - y0*y0 - z0*z0;
+  if (t0 < 0) n0 = 0; else {
+    const g = grad3[permMod12[ii + perm[jj + perm[kk]]]];
+    t0 *= t0; n0 = t0 * t0 * (g[0]*x0 + g[1]*y0 + g[2]*z0);
+  }
+  let t1 = 0.6 - x1*x1 - y1*y1 - z1*z1;
+  if (t1 < 0) n1 = 0; else {
+    const g = grad3[permMod12[ii + i1 + perm[jj + j1 + perm[kk + k1]]]];
+    t1 *= t1; n1 = t1 * t1 * (g[0]*x1 + g[1]*y1 + g[2]*z1);
+  }
+  let t2 = 0.6 - x2*x2 - y2*y2 - z2*z2;
+  if (t2 < 0) n2 = 0; else {
+    const g = grad3[permMod12[ii + i2 + perm[jj + j2 + perm[kk + k2]]]];
+    t2 *= t2; n2 = t2 * t2 * (g[0]*x2 + g[1]*y2 + g[2]*z2);
+  }
+  let t3 = 0.6 - x3*x3 - y3*y3 - z3*z3;
+  if (t3 < 0) n3 = 0; else {
+    const g = grad3[permMod12[ii + 1 + perm[jj + 1 + perm[kk + 1]]]];
+    t3 *= t3; n3 = t3 * t3 * (g[0]*x3 + g[1]*y3 + g[2]*z3);
+  }
+  return 32 * (n0 + n1 + n2 + n3);
+}
+
+/* --- contour renderer --- */
+const canvas = $('#topo');
+const ctx = canvas.getContext('2d');
+let W = 0, H = 0, DPR = 1, cell = 20, cols = 0, rows = 0;
+let field = new Float32Array(0);
+
+/* cursor state, eased for smooth trailing */
+const mouse = { x: -9999, y: -9999, tx: -9999, ty: -9999, amp: 0, tAmp: 0 };
+window.addEventListener('pointermove', e => {
+  mouse.tx = e.clientX; mouse.ty = e.clientY; mouse.tAmp = 1;
+}, { passive: true });
+document.addEventListener('pointerleave', () => { mouse.tAmp = 0; });
+
+function resize() {
+  DPR = Math.min(window.devicePixelRatio || 1, 1.5);
+  W = window.innerWidth; H = window.innerHeight;
+  canvas.width = W * DPR; canvas.height = H * DPR;
+  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  cell = W < 640 ? 24 : 20;
+  cols = Math.ceil(W / cell) + 1;
+  rows = Math.ceil(H / cell) + 1;
+  field = new Float32Array(cols * rows);
+}
+window.addEventListener('resize', resize);
+resize();
+
+const LEVELS = [];
+for (let v = -0.75; v <= 0.76; v += 0.15) LEVELS.push(v);
+
+let t = 0, last = 0;
+
+function computeField() {
+  const s1 = 0.0016, s2 = 0.004;
+  const mx = mouse.x, my = mouse.y, amp = mouse.amp;
+  const sigma2 = 2 * 150 * 150;
+  for (let r = 0; r < rows; r++) {
+    const y = r * cell;
+    for (let c = 0; c < cols; c++) {
+      const x = c * cell;
+      let v = noise3(x * s1, y * s1, t) * 0.72
+            + noise3(x * s2 + 40, y * s2 + 40, t * 0.6) * 0.28;
+      if (amp > 0.01) {
+        const dx = x - mx, dy = y - my;
+        v += amp * 0.85 * Math.exp(-(dx*dx + dy*dy) / sigma2);
+      }
+      field[r * cols + c] = v;
+    }
+  }
+}
+
+/* marching squares: edge pairs per case
+   edges: 0 top, 1 right, 2 bottom, 3 left */
+const CASES = [
+  [], [[3,2]], [[2,1]], [[3,1]],
+  [[0,1]], [[0,3],[1,2]], [[0,2]], [[0,3]],
+  [[0,3]], [[0,2]], [[0,1],[2,3]], [[0,1]],
+  [[3,1]], [[2,1]], [[3,2]], []
+];
+
+function edgePoint(edge, c, r, thr) {
+  const x = c * cell, y = r * cell;
+  const tl = field[r * cols + c],       tr = field[r * cols + c + 1];
+  const bl = field[(r + 1) * cols + c], br = field[(r + 1) * cols + c + 1];
+  let a, b, x1, y1, x2, y2;
+  switch (edge) {
+    case 0: a = tl; b = tr; x1 = x; y1 = y; x2 = x + cell; y2 = y; break;
+    case 1: a = tr; b = br; x1 = x + cell; y1 = y; x2 = x + cell; y2 = y + cell; break;
+    case 2: a = bl; b = br; x1 = x; y1 = y + cell; x2 = x + cell; y2 = y + cell; break;
+    default: a = tl; b = bl; x1 = x; y1 = y; x2 = x; y2 = y + cell;
+  }
+  const f = (thr - a) / (b - a || 1e-9);
+  return [x1 + (x2 - x1) * f, y1 + (y2 - y1) * f];
+}
+
+function drawContours() {
+  ctx.clearRect(0, 0, W, H);
+  for (let li = 0; li < LEVELS.length; li++) {
+    const thr = LEVELS[li];
+    ctx.beginPath();
+    for (let r = 0; r < rows - 1; r++) {
+      for (let c = 0; c < cols - 1; c++) {
+        const tl = field[r * cols + c] > thr ? 8 : 0;
+        const tr = field[r * cols + c + 1] > thr ? 4 : 0;
+        const br = field[(r + 1) * cols + c + 1] > thr ? 2 : 0;
+        const bl = field[(r + 1) * cols + c] > thr ? 1 : 0;
+        const segs = CASES[tl | tr | br | bl];
+        for (let s = 0; s < segs.length; s++) {
+          const p1 = edgePoint(segs[s][0], c, r, thr);
+          const p2 = edgePoint(segs[s][1], c, r, thr);
+          ctx.moveTo(p1[0], p1[1]);
+          ctx.lineTo(p2[0], p2[1]);
+        }
+      }
+    }
+    /* heavier "index" contours every fourth level, like a real map */
+    ctx.strokeStyle = li % 4 === 0 ? 'rgba(225,6,0,0.20)' : 'rgba(225,6,0,0.095)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+}
+
+function frame(now) {
+  requestAnimationFrame(frame);
+  if (document.hidden) return;
+  /* the page can load before the window has a size; recheck each frame */
+  if (W !== window.innerWidth || H !== window.innerHeight) resize();
+  if (W === 0 || H === 0) return;
+  /* full frame rate, with motion scaled by elapsed time so the
+     speed stays the same on any refresh rate */
+  const dt = last ? Math.min(now - last, 100) : 16.7;
+  last = now;
+  t += 0.0003 * dt;
+  const easePos = 1 - Math.pow(0.90, dt / 33);
+  const easeAmp = 1 - Math.pow(0.94, dt / 33);
+  mouse.x += (mouse.tx - mouse.x) * easePos;
+  mouse.y += (mouse.ty - mouse.y) * easePos;
+  mouse.amp += (mouse.tAmp - mouse.amp) * easeAmp;
+  computeField();
+  drawContours();
+}
+
+if (reduceMotion) {
+  const renderStatic = () => {
+    if (W !== window.innerWidth || H !== window.innerHeight) resize();
+    if (W === 0 || H === 0) return;
+    computeField();
+    drawContours();
+  };
+  renderStatic();
+  window.addEventListener('resize', renderStatic);
+  /* retry until the window reports a real size, then stop */
+  const sizePoll = setInterval(() => {
+    renderStatic();
+    if (W > 0) clearInterval(sizePoll);
+  }, 400);
+} else {
+  requestAnimationFrame(frame);
+}
+
+/* ================================================================
+   HOMELAB: interactive 3d model, drag to rotate
+   ================================================================ */
+const stage = $('#hw3d-stage'), box3d = $('#hw3d');
+if (stage && box3d) {
+  let rx = -14, ry = 32;       /* current rotation */
+  let tx = -14, ty = 32;       /* target rotation */
+  let dragging = false, lastX = 0, lastY = 0, autoSpin = true, idleTimer;
+
+  const pauseSpin = ms => {
+    autoSpin = false;
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(() => { autoSpin = true; }, ms);
+  };
+
+  stage.addEventListener('pointerdown', e => {
+    e.preventDefault();
+    dragging = true;
+    autoSpin = false;
+    clearTimeout(idleTimer);
+    lastX = e.clientX; lastY = e.clientY;
+    stage.setPointerCapture(e.pointerId);
+    $$('.view-btn').forEach(b => b.classList.remove('active'));
+  });
+  stage.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    ty += (e.clientX - lastX) * 0.45;
+    tx = Math.max(-90, Math.min(90, tx - (e.clientY - lastY) * 0.45));
+    lastX = e.clientX; lastY = e.clientY;
+  });
+  const endDrag = () => {
+    if (!dragging) return;
+    dragging = false;
+    pauseSpin(4000);
+  };
+  stage.addEventListener('pointerup', endDrag);
+  stage.addEventListener('pointercancel', endDrag);
+
+  const views = { front: [-6, 0], side: [-8, -90], back: [-6, 180] };
+  $$('.view-btn').forEach(btn => btn.addEventListener('click', () => {
+    pauseSpin(6000);
+    /* normalise so the box takes the short way round */
+    ry = ((ry % 360) + 540) % 360 - 180;
+    const v = views[btn.dataset.view];
+    tx = v[0];
+    let diff = v[1] - ry;
+    while (diff > 180) diff -= 360;
+    while (diff < -180) diff += 360;
+    ty = ry + diff;
+    $$('.view-btn').forEach(b => b.classList.toggle('active', b === btn));
+  }));
+
+  (function spin3d() {
+    requestAnimationFrame(spin3d);
+    if (document.hidden) return;
+    if (autoSpin) ty += 0.12;
+    rx += (tx - rx) * 0.08;
+    ry += (ty - ry) * 0.08;
+    box3d.style.transform = 'rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg)';
+  })();
+}
+
+/* ================================================================
+   PROJECTS: live GitHub repositories with a graceful fallback
+   ================================================================ */
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+}
+
+function repoCard(r) {
+  const updated = new Date(r.pushed_at).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
+  const desc = r.description ? escapeHtml(r.description) : 'View the source on GitHub.';
+  const lang = r.language ? escapeHtml(r.language) : 'Mixed';
+  return `
+  <a href="${r.html_url}" target="_blank" rel="noopener" class="card p-7 block reveal in">
+    <div class="flex items-center justify-between mb-5">
+      <span class="t-label">${lang}</span>
+      <span class="arrow">&#8599;</span>
+    </div>
+    <h3 class="font-mono text-sm font-medium mb-2.5 break-all">${escapeHtml(r.name)}</h3>
+    <p class="text-sm text-soft leading-relaxed mb-6 min-h-[3rem]">${desc}</p>
+    <div class="flex items-center justify-between pt-4 border-t border-rule">
+      <span class="t-label">Updated ${updated}</span>
+      <span class="t-label">&#9733; ${r.stargazers_count}</span>
+    </div>
+  </a>`;
+}
+
+function repoFallback() {
+  $('#repo-grid').innerHTML = `
+  <div class="card p-10 sm:col-span-2 lg:col-span-3 text-center">
+    <p class="text-sm text-soft mb-6">Repositories could not be loaded right now.</p>
+    <a class="btn btn-red inline-flex" href="https://github.com/SC4RT" target="_blank" rel="noopener">
+      <span>Open GitHub</span><span>&#8599;</span>
+    </a>
+  </div>`;
+}
+
+fetch('https://api.github.com/users/SC4RT/repos?sort=pushed&per_page=6')
+  .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+  .then(repos => {
+    if (!Array.isArray(repos) || repos.length === 0) return repoFallback();
+    $('#repo-grid').innerHTML = repos.map(repoCard).join('');
+  })
+  .catch(repoFallback);
+
+/* ================================================================
+   CONTACT: copy email with feedback
+   ================================================================ */
+function legacyCopy(text) {
+  return new Promise((res, rej) => {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy') ? res() : rej(new Error('execCommand')); }
+    catch (e) { rej(e); }
+    ta.remove();
+  });
+}
+
+function copyText(text, btn, labelEl, doneMsg) {
+  if (!labelEl.dataset.orig) labelEl.dataset.orig = labelEl.textContent;
+  const write = (navigator.clipboard
+    ? navigator.clipboard.writeText(text)
+    : Promise.reject()
+  ).catch(() => legacyCopy(text));
+  write.then(() => {
+    labelEl.textContent = doneMsg;
+  }).catch(() => {
+    labelEl.textContent = 'Copy failed';
+  }).finally(() => {
+    clearTimeout(labelEl._resetTimer);
+    labelEl._resetTimer = setTimeout(() => {
+      labelEl.textContent = labelEl.dataset.orig;
+    }, 1800);
+  });
+}
+
+$('#copy-email').addEventListener('click', function () {
+  copyText('zacchambers@z4c.co.uk', this, $('#copy-email-label'), 'Copied');
+});
+
+})();
+</script>
+</body>
+</html>
